@@ -1,0 +1,57 @@
+FROM golang:1.18-alpine AS build_base
+
+RUN apk add --no-cache git
+
+# Set the Current Working Directory inside the container
+WORKDIR /mybuild
+
+# We want to populate the module cache based on the go.{mod,sum} files.
+COPY go.mod .
+COPY go.sum .
+
+RUN go mod download
+
+COPY . .
+
+# Unit tests
+RUN CGO_ENABLED=0 go test -v
+RUN chown -R root  /mybuild/main.go
+
+# Build the Go app
+RUN go build -o /mybuild/main.go .
+
+# Start fresh from a smaller image
+FROM alpine:3.9
+RUN apk add ca-certificates
+
+COPY --from=build_base /mybuild/main.go /mybuild/main.go
+
+# This container exposes port 8080 to the outside world
+EXPOSE 8080
+
+USER root:root
+
+ENTRYPOINT ["/mybuild/main.go"]
+root@ip-172-31-90-213:/mybuild# cat docker-compose.yml
+services:
+  app:
+    image: myimage
+    working_dir: /mybuild
+    volumes:
+      - ./:/app
+    environment:
+      DB_HOST: mysql
+      DB_USER: root
+      DB_PASSWORD: secret
+      DB_DATABASE: app_db
+
+  mysql:
+    image: mysql:8.0
+    volumes:
+      - todo-mysql-data:/db/init:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: app_db
+
+volumes:
+  todo-mysql-data:
