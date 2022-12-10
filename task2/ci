@@ -5,7 +5,7 @@ node {
       } 
       stage('Build image') {   
       
-            sh 'cd task2/'       
+            sh 'pwd'       
             sh 'docker build -t  goapp_image .'
             sh 'sudo docker run -dp 8080:8080 goapp_image .'
             sh 'docker ps'
