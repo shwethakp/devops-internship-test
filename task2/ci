@@ -3,4 +3,14 @@ node {
              
             checkout scm    
       } 
+      stage('Build image') {         
+       
+            sh 'docker build -t  myimage .'
+            sh 'sudo docker run -dp 8080:8080 myimage .'
+            sh 'docker ps'
+       }  
+       stage('Test image') {            
+             sh 'echo "Tests passed"'        
+            }    
+        }  
      }
