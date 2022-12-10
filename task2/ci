@@ -6,8 +6,8 @@ node {
       stage('Build image') {   
       
             sh 'pwd'       
-            sh 'docker build -t  myimage ./task2'
-            sh 'sudo docker run -dp 8080:8080 myimage ./task2'
+            sh 'docker build -t  myapp_image ./task2'
+            sh 'sudo docker run -dp 8080:8080 myapp_image ./task2'
             sh 'docker ps'
        }  
        stage('Test image') {            
