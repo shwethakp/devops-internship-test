@@ -3,8 +3,9 @@ node {
              
             checkout scm    
       } 
-      stage('Build image') {         
-       
+      stage('Build image') {   
+      
+            sh 'pwd'       
             sh 'docker build -t  myimage .'
             sh 'sudo docker run -dp 8080:8080 myimage .'
             sh 'docker ps'
