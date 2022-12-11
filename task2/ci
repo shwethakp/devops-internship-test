@@ -13,7 +13,7 @@ node {
              sh 'echo "Tests passed"'        
         }    
       stage('Push image') {
-        docker.withRegistry('https://registry.hub.docker.com', 'git') {
+        docker.withRegistry('https://registry.hub.docker.com', 'skurub2') {
             sh 'docker tag  goapp_image:latest skurub2/my-public-repo:goapp_image'
             sh  'docker push skurub2/my-private-repo:goapp_image'        
              }   
