@@ -18,6 +18,6 @@ resource "aws_instance" "terra_server" {
   instance_type = "t2.micro"
 
   tags = {
-    Name = "Testserver"
+    Name = "Terraserver"
   }
 }
