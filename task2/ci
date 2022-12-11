@@ -4,19 +4,18 @@ node {
             checkout scm    
       } 
       stage('Build image') {   
-      
-            sh 'pwd'       
+           
             sh 'docker build -t  goapp_image .'
             sh 'sudo docker run -dp 8080:8080 goapp_image .'
             sh 'docker ps'
        }  
-       stage('Test image') {            
+      stage('Test image') {            
              sh 'echo "Tests passed"'        
-            }    
-       stage('Push image') {
+        }    
+      stage('Push image') {
         docker.withRegistry('https://registry.hub.docker.com', 'git') {
             sh 'docker tag  goapp_image:latest skurub2/my-public-repo:goapp_image'
             sh  'docker push skurub2/my-private-repo:goapp_image'        
-              }   
-       }
-     }
+             }   
+            }
+      }
